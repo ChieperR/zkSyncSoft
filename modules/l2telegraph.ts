@@ -184,8 +184,7 @@ export const L2Telegraph = async (privateKey: Hex) => {
         const txMintHash = await mint()
 
         if (txMintHash != undefined) {
-            // const sleepTime = random(generalConfig.sleepAfterApprove[0], generalConfig.sleepAfterApprove[1])
-            const sleepTime = 15
+            const sleepTime = random(generalConfig.sleepAfterApprove[0], generalConfig.sleepAfterApprove[1])
             logger.info(`${walletAddress} | Waiting ${sleepTime} sec after mint and before bridge...`)
             await sleep(sleepTime * 1000)
 
