@@ -13,7 +13,7 @@ import {
     addresses,
     decimals,
     l2telegraphContracts,
-    l2telegraphDestContracts,
+    l2telegraphMsgDestContracts, l2telegraphNftDestContracts,
 } from "../data/zksync-contract-addresses";
 import {approve} from "../utils/approve";
 import {generalConfig} from "../config";
@@ -46,17 +46,6 @@ export const L2Telegraph = async (privateKey: Hex) => {
     })
 
     const estimateFees = async (destChainId: number) => {
-        const adapterParams = encodePacked(
-            [
-                "uint16",
-                "uint"
-            ],
-            [
-                2,
-                BigInt(250000)
-            ]
-        )
-
         const txValue = await zksyncClient.readContract({
             address: l2telegraphContracts.message,
             abi: l2telegraphMsgAbi,
@@ -73,12 +62,13 @@ export const L2Telegraph = async (privateKey: Hex) => {
         return BigInt(Math.round(Number(txValue[0]) * 1.2))
     }
 
-    const chooseRandomDestNetwork = async () => {
+    const chooseRandomDestNetwork = async (isNftBridge: boolean = false) => {
         const possibleNetworks: number[] = []
+        const l2telegraphFee = BigInt(parseEther('0.00025'))
         logger.info(`Calculating possible destination networks based on your maxLzFee...`)
 
-        for (let chainId in l2telegraphDestContracts) {
-            const fees = await estimateFees(+chainId) + BigInt(parseEther('0.00025'))
+        for (let chainId in (isNftBridge ? l2telegraphNftDestContracts : l2telegraphMsgDestContracts)) {
+            const fees = await estimateFees(+chainId) + (isNftBridge ? 0n : l2telegraphFee)
 
             if (fees < parseEther(generalConfig.maxLzFee)) {
                 possibleNetworks.push(+chainId)
@@ -99,7 +89,7 @@ export const L2Telegraph = async (privateKey: Hex) => {
 
         logger.info(`${walletAddress} | Sending Message`)
 
-        const destChainId = await chooseRandomDestNetwork()
+        const destChainId = await chooseRandomDestNetwork(false)
         const value = await estimateFees(destChainId) + BigInt(parseEther('0.00025'))
         const randomWords = generate({
             minLength: 2,
@@ -112,7 +102,7 @@ export const L2Telegraph = async (privateKey: Hex) => {
             try {
                 const trustedRemote = encodePacked(
                     ['address', 'address'],
-                    [l2telegraphDestContracts[destChainId], l2telegraphContracts.message as Hex]
+                    [l2telegraphMsgDestContracts[destChainId], l2telegraphContracts.message as Hex]
                 )
 
                 const txHash = await l2telegraphMessageContract.write.sendMessage([
@@ -190,18 +180,21 @@ export const L2Telegraph = async (privateKey: Hex) => {
 
         logger.info(`${walletAddress} | Mint and bridging NFT`)
 
-        const destChainId = 175
+        const destChainId = await chooseRandomDestNetwork(true)
         const txMintHash = await mint()
 
         if (txMintHash != undefined) {
-            const sleepTime = random(generalConfig.sleepAfterApprove[0], generalConfig.sleepAfterApprove[1])
-            // const sleepTime = 15
+            // const sleepTime = random(generalConfig.sleepAfterApprove[0], generalConfig.sleepAfterApprove[1])
+            const sleepTime = 15
             logger.info(`${walletAddress} | Waiting ${sleepTime} sec after mint and before bridge...`)
             await sleep(sleepTime * 1000)
 
             while (!isSuccess) {
                 try {
-                    const trustedRemote = '0x5b10ae182c297ec76fe6fe0e3da7c4797cede02dd43a183c97db9174962607a8b6552ce320eac5aa'
+                    const trustedRemote = encodePacked(
+                        ['address', 'address'],
+                        [l2telegraphNftDestContracts[destChainId], l2telegraphContracts.nft as Hex]
+                    )
 
                     const receipt = await zksyncClient.waitForTransactionReceipt({
                         hash: txMintHash

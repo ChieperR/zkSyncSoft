@@ -35,7 +35,7 @@ export const l2telegraphContracts: contractsList = {
     nft: '0xD43A183C97dB9174962607A8b6552CE320eAc5aA',
 }
 
-export const l2telegraphDestContracts: {
+export const l2telegraphMsgDestContracts: {
     [key: number]: Hex
 } = {
     102: '0x2f4572C09D6bE78F9adc18FE26fB298546eEf58e', // bnb
@@ -59,6 +59,24 @@ export const l2telegraphDestContracts: {
     210: '0xDC60fd9d2A4ccF97f292969580874De69E6c326E', // astar
     212: '0xDC60fd9d2A4ccF97f292969580874De69E6c326E', // conflux
     214: '0x9F63DBdF90837384872828d1Ed6Eb424A7F7f939', // scroll
+}
+
+export const l2telegraphNftDestContracts: {
+    [key: number]: Hex
+} = {
+    102: '0xc162cf8c4c6697ab8e613ce0cd37c0ab97ba5a60', // bnb
+    106: '0x9539c9f145d2bf0eb7ed0824fe8583cd62410d3e', // avalanche
+    109: '0xf9e15dd2a618bf1c0cf60f544a80f8ec774c6813', // polygon
+    110: '0x80be0f5b780e093b3f53bd5df8d1cf09aabf690f', // arbitrum
+    111: '0x64e0f6164ac110b67df9a4848707ffbcb86c87a9', // optimism
+    112: '0x80be0f5b780e093b3f53bd5df8d1cf09aabf690f', // fantom
+    158: '0xdc60fd9d2a4ccf97f292969580874de69e6c326e', // polygon zkevm
+    175: '0x5b10ae182c297ec76fe6fe0e3da7c4797cede02d', // arb nova
+    176: '0x1a77bb02fba60251dccc1611e7321d7cf6f1feef', // meter
+    183: '0xdc60fd9d2a4ccf97f292969580874de69e6c326e', // linea
+    184: '0x36a358b3ba1fb368e35b71ea40c7f4ab89bfd8e1', // base
+    202: '0x64e0f6164ac110b67df9a4848707ffbcb86c87a9', // opbnb
+    212: '0x36a358b3ba1fb368e35b71ea40c7f4ab89bfd8e1', // conflux
 }
 
 export const dmailContractAddress = '0x981F198286E40F9979274E0876636E9144B8FB8E'
