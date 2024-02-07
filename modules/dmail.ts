@@ -12,7 +12,7 @@ import {generate} from "random-words";
 import { sha256 } from 'viem'
 
 export const Dmail = async (privateKey: Hex) => {
-    const logger = makeLogger('Dmail.ai')
+    const logger = makeLogger('Dmail   ')
     const zksyncWallet = getZksyncWalletClient(privateKey)
     const walletAddress = zksyncWallet.account.address
 
