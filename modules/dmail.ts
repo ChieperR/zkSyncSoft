@@ -43,7 +43,7 @@ export const Dmail = async (privateKey: Hex) => {
         let isSuccess = false
         let retryCount = 1
 
-        logger.info(`${walletAddress} | Using Dmail`)
+        logger.info(`${walletAddress} | Sending Dmail message`)
 
         while (!isSuccess) {
             try {
