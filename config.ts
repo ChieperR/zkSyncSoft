@@ -14,6 +14,8 @@ export const generalConfig = {
     maxLzFee: '0.0003', // Сколько максимум эфира вы готовы отдать в l2telegraph за одну транзу
     // Внимание. Минт стоит фиксированно 0.0005 ETH и в расчёт не входит
     odosRefCode: '', // реферальный код для Odos, оставить пустым если нет
+    inchApiKey: '', // Без API ключа модуль 1inch работать не будет
+    // Брать API отсюда - https://portal.1inch.dev/applications
 
     mode: 1
     // 1 − Random modules
@@ -27,6 +29,7 @@ export const modulesConfig = {
         'maverick',
         'pancake',
         'odos',
+        '1inch',
         'openocean',
         'l2telegraphMsg',
         'l2telegraphNft',
@@ -49,6 +52,7 @@ export const modulesConfig = {
         'maverick'
         'pancake'
         'odos'
+        '1inch'
         'openocean'
         'l2telegraphMsg'
         'l2telegraphNft'

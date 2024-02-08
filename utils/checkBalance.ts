@@ -4,7 +4,8 @@ export const isBalanceError = (error: any) => {
         error.toString().includes('exceeds the balance') ||
         error.toString().includes('Not enough balance') ||
         error.toString().includes('gas required exceeds allowance') ||
-        error.toString().includes('insufficient balance')
+        error.toString().includes('insufficient balance') ||
+        error?.response?.data?.description.includes('Not enough ETH balance')
     ) {
         return true
     }

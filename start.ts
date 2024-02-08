@@ -1,10 +1,10 @@
 import {privateKeyConvert, readWallets} from "./utils/wallet"
 import {random, shuffle, sleep,} from "./utils/common"
-import {generalConfig, modulesConfig} from "./config"
-import {Hex} from "viem";
-import {Syncswap} from "./modules/syncswap";
-import {privateKeyToAccount} from "viem/accounts";
 import {makeLogger} from "./utils/logger";
+import {Hex} from "viem";
+import {privateKeyToAccount} from "viem/accounts";
+import {generalConfig, modulesConfig} from "./config"
+import {Syncswap} from "./modules/syncswap";
 import {Muteio} from "./modules/muteio";
 import {Maverick} from "./modules/maverick";
 import {Pancake} from "./modules/pancake";
@@ -12,14 +12,14 @@ import {L2Telegraph} from "./modules/l2telegraph";
 import {Dmail} from "./modules/dmail";
 import {Odos} from "./modules/odos";
 import {Openocean} from "./modules/openocean";
-import {logger} from "ethers";
+import {Inch} from "./modules/1inch";
 
 let privateKeysTmp = readWallets('./private_keys.txt')
 shuffle(privateKeysTmp)
 
 let privateKeys = privateKeysTmp.slice(0, random(generalConfig.accountsPerRun[0], generalConfig.accountsPerRun[1])).map(privateKeyConvert)
 
-const checkAndExecuteModule = async (module: string, privateKey: Hex) => {
+const checkAndExecuteModule = async (module: string, privateKey: Hex, logger: any) => {
     switch (module) {
         case 'syncswap':
             const syncswap = await Syncswap(privateKey)
@@ -40,6 +40,10 @@ const checkAndExecuteModule = async (module: string, privateKey: Hex) => {
         case 'odos':
             const odos = await Odos(privateKey)
             await odos.roundSwap()
+            break
+        case '1inch':
+            const inch = await Inch(privateKey)
+            await inch.roundSwap()
             break
         case 'openocean':
             const openocean = await Openocean(privateKey)
@@ -75,7 +79,7 @@ const accountWorkRandomModules = async (privateKey: Hex, logger: any) => {
         const numberOfModules = modulesConfig.randomModules.length
         const module = modulesConfig.randomModules[random(0, numberOfModules - 1)]
 
-        await checkAndExecuteModule(module, privateKey)
+        await checkAndExecuteModule(module, privateKey, logger)
 
         if (i === txForRun - 1) {
             logger.warn(`${walletAddress} done all ${txForRun} transactions`)
@@ -103,7 +107,7 @@ const accountWorkCustomModules = async (privateKey: Hex, logger: any) => {
             if (module == undefined) break
         }
 
-        await checkAndExecuteModule(module, privateKey)
+        await checkAndExecuteModule(module, privateKey, logger)
 
         if (modules.length == 0) {
             logger.warn(`${walletAddress} done all transactions`)

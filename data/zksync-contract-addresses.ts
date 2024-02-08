@@ -3,6 +3,7 @@ import {contractsList} from "../utils/types";
 
 export const addresses: contractsList = {
     zeroAddress: '0x0000000000000000000000000000000000000000',
+    nativeToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
     WETH: '0x5AEa5775959fBC2557Cc8789bC1bf90A239D9a91',
     USDC: '0x3355df6D4c9C3035724Fd0e3914dE96A5a83aaf4',
     USDT: '0x493257fD37EDB34451f62EDf8D2a0C418852bA4C',
@@ -84,3 +85,5 @@ export const dmailContractAddress = '0x981F198286E40F9979274E0876636E9144B8FB8E'
 export const openoceanContractAddress = '0x36A1aCbbCAfca2468b85011DDD16E7Cb4d673230'
 
 export const odosRouterContract = '0x4bBa932E9792A2b917D47830C93a9BC79320E4f7'
+
+export const inchRouterContract = '0x6e2B76966cbD9cF4cC2Fa0D76d24d5241E0ABC2F'
