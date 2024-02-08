@@ -72,8 +72,8 @@ const accountWorkRandomModules = async (privateKey: Hex, logger: any) => {
 
     for (let i = 0; i < txForRun; i++) {
         const sleepTime = random(generalConfig.sleepBetweenTx[0], generalConfig.sleepBetweenTx[1])
-        const numberOfModules = modulesConfig.modules.length
-        const module = modulesConfig.modules[random(0, numberOfModules - 1)]
+        const numberOfModules = modulesConfig.randomModules.length
+        const module = modulesConfig.randomModules[random(0, numberOfModules - 1)]
 
         await checkAndExecuteModule(module, privateKey)
 

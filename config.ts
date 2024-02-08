@@ -21,7 +21,7 @@ export const generalConfig = {
 }
 
 export const modulesConfig = {
-    modules: [
+    randomModules: [
         'syncswap',
         'muteio',
         'maverick',
@@ -32,13 +32,26 @@ export const modulesConfig = {
         'l2telegraphNft',
         'dmail',
     ], // Модули, используемые в рандом моде. Можно убирать и добавлять
+    // Если хотите, увеличить частоту, с которой попадается тот или иной модуль, просто добавьте ещё раз его название
     customModules: [
         'dmail',
         ['l2telegraphMsg', 'l2telegraphNft'],
         'syncswap',
         ['muteio', 'odos', undefined]
-    ], // Кастом модули
+    ],
     /*  Одна строчка − один шаг. Выполняется пошагово.
     Если на шаге вы хотите рандомный модуль, заключите его в квадратные скобки. Пример − шаг 2
     Если в списке рандомных модулей вы укажете undefined и рандом его выберет − шаг будет пропущен. Пример − 4  */
+
+    /* Список всех модулей:
+        'syncswap'
+        'muteio'
+        'maverick'
+        'pancake'
+        'odos'
+        'openocean'
+        'l2telegraphMsg'
+        'l2telegraphNft'
+        'dmail'
+     */
 }
