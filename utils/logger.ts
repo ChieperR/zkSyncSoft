@@ -5,7 +5,8 @@ export function makeLogger(name: string) {
     const logger = new Logger({ 
         hideLogPositionForProduction: true, 
         name: name,
-        prettyLogTemplate: '{{dd}}.{{mm}} {{hh}}:{{MM}}:{{ss}}\t{{logLevelName}}\t{{name}}\t'
+        prettyLogTemplate: '{{dd}}.{{mm}} {{hh}}:{{MM}}:{{ss}}\t{{logLevelName}}\t{{name}}\t',
+        prettyLogTimeZone: 'local',
     })
     
     logger.attachTransport((logObj) => {
