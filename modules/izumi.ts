@@ -143,10 +143,10 @@ export const Izumi = async (privateKey: Hex) => {
         while (!isSuccess) {
             try {
                 if (uintValue == BigInt(0)) throw new Error(`insufficient balance of ${fromToken} token`);
-                const deadline = BigInt(Math.floor(Date.now() / 1000)) + BigInt(1800);
 
                 await approve(zksyncWallet, zksyncClient, addresses[fromToken], izumiSwapContract.address, uintValue, logger)
 
+                const deadline = BigInt(Math.floor(Date.now() / 1000)) + BigInt(1800);
                 const minAmountOut = await getMinAmountOut(uintValue, swapPath)
                 await checkMinAmountOut(value, true, +formatEther(minAmountOut))
 

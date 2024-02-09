@@ -110,6 +110,7 @@ export const Spacefi = async (privateKey: Hex) => {
 
         while (!isSuccess) {
             try {
+                if (uintValue == BigInt(0)) throw new Error(`insufficient balance of ${fromToken} token`);
                 const deadline = BigInt(Math.floor(Date.now() / 1000)) + BigInt(1800);
 
                 await approve(zksyncWallet, zksyncClient, addresses[fromToken], spacefiRouterContract.address, uintValue, logger)

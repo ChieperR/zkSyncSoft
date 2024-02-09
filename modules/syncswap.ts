@@ -136,12 +136,14 @@ export const Syncswap = async (privateKey: Hex) => {
 
         while (!isSuccess) {
             try {
+                if (uintValue == BigInt(0)) throw new Error(`insufficient balance of ${fromToken} token`);
                 const paths = await getSwapPaths(addresses[fromToken], addresses.WETH, uintValue)
+
+                await approve(zksyncWallet, zksyncClient, addresses[fromToken], syncswapRouterContract.address, uintValue, logger)
+
                 const deadline = BigInt(Math.floor(Date.now() / 1000)) + BigInt(1800);
                 const minAmountOut = await getMinAmountOut(uintValue, addresses[fromToken], addresses.WETH)
                 await checkMinAmountOut(value, true, +formatEther(minAmountOut))
-
-                await approve(zksyncWallet, zksyncClient, addresses[fromToken], syncswapRouterContract.address, uintValue, logger)
 
                 const txHash = await syncswapRouterContract.write.swap([
                     paths,

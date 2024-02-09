@@ -136,6 +136,9 @@ export const Maverick = async (privateKey: Hex) => {
         while (!isSuccess) {
             try {
                 if (uintValue == BigInt(0)) throw new Error(`insufficient balance of ${fromToken} token`);
+
+                await approve(zksyncWallet, zksyncClient, addresses[fromToken], maverickRouterContract.address, uintValue, logger)
+
                 const deadline = BigInt(Math.floor(Date.now() / 1000)) + BigInt(1800);
                 const minAmountOut = await getMinAmountOut(uintValue, false)
                 await checkMinAmountOut(value, true, +formatEther(minAmountOut))
@@ -160,8 +163,6 @@ export const Maverick = async (privateKey: Hex) => {
                         walletAddress
                     ]
                 })
-
-                await approve(zksyncWallet, zksyncClient, addresses[fromToken], maverickRouterContract.address, uintValue, logger)
 
                 const txHash = await maverickRouterContract.write.multicall([[
                     swapData,

@@ -118,7 +118,7 @@ export const Odos = async (privateKey: Hex) => {
                 await approve(zksyncWallet, zksyncClient, addresses[fromToken], odosRouterContract, uintValue, logger)
 
                 const quoteData = await quote(addresses[fromToken], addresses.zeroAddress, uintValue)
-                let txData = await assemble(quoteData)
+                const txData = await assemble(quoteData)
                 txData.value = parseInt(txData.value)
 
                 const txHash = await zksyncWallet.sendTransaction(txData)
