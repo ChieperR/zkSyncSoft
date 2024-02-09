@@ -15,6 +15,7 @@ import {Openocean} from "./modules/openocean";
 import {Inch} from "./modules/1inch";
 import {Spacefi} from "./modules/spacefi";
 import {Zkswap} from "./modules/zkswap";
+import {Izumi} from "./modules/izumi";
 
 let privateKeysTmp = readWallets('./private_keys.txt')
 shuffle(privateKeysTmp)
@@ -38,6 +39,10 @@ const checkAndExecuteModule = async (module: string, privateKey: Hex, logger: an
         case 'pancake':
             const pancake = await Pancake(privateKey)
             await pancake.roundSwap()
+            break
+        case 'izumi':
+            const izumi = await Izumi(privateKey)
+            await izumi.roundSwap()
             break
         case 'spacefi':
             const spacefi = await Spacefi(privateKey)

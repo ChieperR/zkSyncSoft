@@ -32,6 +32,7 @@ export const modulesConfig = {
         'muteio',
         'maverick',
         'pancake',
+        'izumi',
         'spacefi',
         'zkswap',
         'odos',
@@ -57,6 +58,7 @@ export const modulesConfig = {
         'muteio'
         'maverick'
         'pancake'
+        'izumi'
         'spacefi'
         'zkswap'
         'odos'

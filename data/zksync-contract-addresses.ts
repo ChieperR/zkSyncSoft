@@ -31,6 +31,11 @@ export const pancakeContracts: contractsList = {
     quoter: '0x3d146FcE6c1006857750cBe8aF44f76a28041CCc',
 }
 
+export const izumiContracts: contractsList = {
+    swap: '0x943ac2310D9BC703d6AB5e5e76876e212100f894',
+    quoter: '0x30C089574551516e5F1169C32C6D429C92bf3CD7'
+}
+
 export const spacefiRouterContractAddress: Hex = '0xbE7D1FD1f6748bbDefC4fbaCafBb11C6Fc506d1d'
 
 export const zkswapRouterContractAddress: Hex = '0x18381c0f738146Fb694DE18D1106BdE2BE040Fa4'
