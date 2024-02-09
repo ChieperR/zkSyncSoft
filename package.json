@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "tsc",
-    "start": "node --no-warnings --max-old-space-size=8192 --experimental-specifier-resolution=node --loader ts-node/esm --import ./logError.js start.ts",
+    "start": "node --no-warnings --max-old-space-size=8192 --experimental-specifier-resolution=node --loader ts-node/esm --import ./logError.js ./modules/spacefi.ts",
     "decode": "node --no-warnings --max-old-space-size=8192 --experimental-specifier-resolution=node --loader ts-node/esm --import ./logError.js ./utils/decodeFunctionData.ts",
     "lint": "eslint . --ext .ts"
   },

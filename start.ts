@@ -13,6 +13,7 @@ import {Dmail} from "./modules/dmail";
 import {Odos} from "./modules/odos";
 import {Openocean} from "./modules/openocean";
 import {Inch} from "./modules/1inch";
+import {Spacefi} from "./modules/spacefi";
 
 let privateKeysTmp = readWallets('./private_keys.txt')
 shuffle(privateKeysTmp)
@@ -36,6 +37,10 @@ const checkAndExecuteModule = async (module: string, privateKey: Hex, logger: an
         case 'pancake':
             const pancake = await Pancake(privateKey)
             await pancake.roundSwap()
+            break
+        case 'spacefi':
+            const spacefi = await Spacefi(privateKey)
+            await spacefi.roundSwap()
             break
         case 'odos':
             const odos = await Odos(privateKey)

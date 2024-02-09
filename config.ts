@@ -28,6 +28,7 @@ export const modulesConfig = {
         'muteio',
         'maverick',
         'pancake',
+        'spacefi',
         'odos',
         '1inch',
         'openocean',
@@ -51,6 +52,7 @@ export const modulesConfig = {
         'muteio'
         'maverick'
         'pancake'
+        'spacefi'
         'odos'
         '1inch'
         'openocean'

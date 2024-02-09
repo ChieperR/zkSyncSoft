@@ -31,6 +31,8 @@ export const pancakeContracts: contractsList = {
     quoter: '0x3d146FcE6c1006857750cBe8aF44f76a28041CCc',
 }
 
+export const spacefiRouterContractAddress = '0xbE7D1FD1f6748bbDefC4fbaCafBb11C6Fc506d1d'
+
 export const l2telegraphContracts: contractsList = {
     message: '0x0D4a6D5964F3b618d8e46BCfBF2792b0D769fBDa',
     nft: '0xD43A183C97dB9174962607A8b6552CE320eAc5aA',

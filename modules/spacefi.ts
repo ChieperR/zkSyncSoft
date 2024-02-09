@@ -9,48 +9,35 @@ import {makeLogger} from "../utils/logger";
 import {isBalanceError} from "../utils/checkBalance";
 import {random, sleep} from "../utils/common";
 import {getTokenBalance} from "../utils/tokenBalance";
-import {addresses, decimals} from "../data/zksync-contract-addresses";
+import {addresses, decimals, spacefiRouterContractAddress} from "../data/zksync-contract-addresses";
 import {approve} from "../utils/approve";
 import {generalConfig} from "../config";
 import {chooseRandomStable} from "../utils/chooseRandomStable";
-import {muteioRouterAbi} from "../data/abi/muteio_router";
 import {tokens} from "../utils/types"
+import {spacefiRouterAbi} from "../data/abi/spacefi_router";
 
-export const Muteio = async (privateKey: Hex) => {
-    const logger = makeLogger('Mute.io ')
+export const Spacefi = async (privateKey: Hex) => {
+    const logger = makeLogger('SpaceFi ')
     const zksyncClient = getZksyncPublicClient()
     const zksyncWallet = getZksyncWalletClient(privateKey)
     const walletAddress = zksyncWallet.account.address
 
-    const muteioRouterContract = getContract({
-        address: '0x8B791913eB07C32779a16750e3868aA8495F5964',
-        abi: muteioRouterAbi,
+    const spacefiRouterContract = getContract({
+        address: spacefiRouterContractAddress,
+        abi: spacefiRouterAbi,
         client: zksyncWallet
     })
 
-    const getSwapPath = (fromToken: Hex, toToken: Hex) => {
-        switch (fromToken == addresses.WETH ? toToken : fromToken) {
-            case addresses.USDC:
-            case addresses.USDT:
-                return [fromToken, toToken]
-            case addresses.DAI:
-                return [fromToken, addresses.USDC, toToken]
-            default:
-                return [fromToken, toToken]
-        }
-    }
-
-    const getMinAmountOutAndStableParameter = async (amountIn: bigint, path: Hex[]) => {
-        const response = await muteioRouterContract.read.getAmountsOutExpanded([
+    const getMinAmountOut = async (amountIn: bigint, path: Hex[]) => {
+        const response = await spacefiRouterContract.read.getAmountsOut([
             amountIn,
             path
-        ]) as [bigint[], boolean[], bigint[]]
+        ]) as [bigint, bigint]
 
-        const amountOut = response[0][response[0].length - 1]
+        const amountOut = response[1]
         const minAmountOut = BigInt(Math.round(Number(amountOut) * (1 - generalConfig.slippage / 100)))
-        const stableParameter = response[1]
 
-        return {minAmountOut, stableParameter}
+        return minAmountOut
     }
 
     const swapEthToToken = async (uintValue: bigint, toToken: tokens = 'USDC') => {
@@ -59,23 +46,22 @@ export const Muteio = async (privateKey: Hex) => {
         let retryCount = 1
 
         const value = formatEther(uintValue)
-        let swapPath = getSwapPath(addresses.WETH, addresses[toToken])
+        const swapPath = [addresses.WETH, addresses[toToken]]
 
         logger.info(`${walletAddress} | Swap ${value} ETH -> ${toToken}`)
 
         while (!isSuccess) {
             try {
                 const deadline = BigInt(Math.floor(Date.now() / 1000)) + BigInt(1800);
-                const {minAmountOut, stableParameter} = await getMinAmountOutAndStableParameter(uintValue, swapPath)
+                const minAmountOut = await getMinAmountOut(uintValue, swapPath)
 
                 await checkMinAmountOut(value, false, +formatUnits(minAmountOut, decimals[toToken]))
 
-                const txHash = await muteioRouterContract.write.swapExactETHForTokens([
+                const txHash = await spacefiRouterContract.write.swapExactETHForTokens([
                     minAmountOut,
                     swapPath,
                     walletAddress,
                     deadline,
-                    stableParameter
                 ], {
                     value: uintValue
                 })
@@ -118,25 +104,25 @@ export const Muteio = async (privateKey: Hex) => {
         let isSuccess = false
         let retryCount = 1
 
-        const swapPath = getSwapPath(addresses[fromToken], addresses.WETH)
+        const swapPath = [addresses[fromToken], addresses.WETH]
 
         logger.info(`${walletAddress} | Swap ${value} ${fromToken} -> ETH`)
 
         while (!isSuccess) {
             try {
                 const deadline = BigInt(Math.floor(Date.now() / 1000)) + BigInt(1800);
-                const {minAmountOut, stableParameter} = await getMinAmountOutAndStableParameter(uintValue, swapPath)
+
+                await approve(zksyncWallet, zksyncClient, addresses[fromToken], spacefiRouterContract.address, uintValue, logger)
+
+                const minAmountOut = await getMinAmountOut(uintValue, swapPath)
                 await checkMinAmountOut(value, true, +formatEther(minAmountOut))
 
-                await approve(zksyncWallet, zksyncClient, addresses[fromToken], muteioRouterContract.address, uintValue, logger)
-
-                const txHash = await muteioRouterContract.write.swapExactTokensForETH([
+                const txHash = await spacefiRouterContract.write.swapExactTokensForETH([
                     uintValue,
                     minAmountOut,
                     swapPath,
                     walletAddress,
                     deadline,
-                    stableParameter
                 ])
 
                 logger.info(`${walletAddress} | Success swap ${value} ${fromToken} -> ETH: https://explorer.zksync.io/tx/${txHash}`)
@@ -166,7 +152,7 @@ export const Muteio = async (privateKey: Hex) => {
         const randomPercent: number = random(generalConfig.swapEthPercent[0], generalConfig.swapEthPercent[1]) / 100
         const ethBalance: bigint = await zksyncClient.getBalance({address: walletAddress})
         if (ethBalance !== BigInt(0)) {
-            const randomStable = chooseRandomStable()
+            const randomStable = chooseRandomStable(2)
             let amount: bigint = BigInt(Math.round(Number(ethBalance) * randomPercent))
             const sleepTimeTo = random(generalConfig.sleepBeforeSwapBack[0], generalConfig.sleepBeforeSwapBack[1])
 
@@ -179,5 +165,5 @@ export const Muteio = async (privateKey: Hex) => {
         } else logger.error(`${walletAddress} | Wallet have zero balance...`)
     }
 
-    return {roundSwap}
+    return { roundSwap }
 }
