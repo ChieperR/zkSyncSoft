@@ -124,7 +124,7 @@ export const Openocean = async (privateKey: Hex) => {
     const roundSwap = async () => {
         const randomPercent: number = random(generalConfig.swapEthPercent[0], generalConfig.swapEthPercent[1]) / 100
         const ethBalance: bigint = await zksyncClient.getBalance({ address: walletAddress })
-        const randomStable = 'USDT'
+        const randomStable = chooseRandomStable()
         if (ethBalance !== BigInt(0)) {
             const amount: bigint = BigInt(Math.round(Number(ethBalance) * randomPercent))
             const sleepTimeTo = random(generalConfig.sleepBeforeSwapBack[0], generalConfig.sleepBeforeSwapBack[1])
