@@ -33,6 +33,7 @@ export const modulesConfig = {
         'maverick',
         'pancake',
         'spacefi',
+        'zkswap',
         'odos',
         '1inch',
         'openocean',
@@ -57,6 +58,7 @@ export const modulesConfig = {
         'maverick'
         'pancake'
         'spacefi'
+        'zkswap'
         'odos'
         '1inch'
         'openocean'

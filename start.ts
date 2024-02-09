@@ -14,6 +14,7 @@ import {Odos} from "./modules/odos";
 import {Openocean} from "./modules/openocean";
 import {Inch} from "./modules/1inch";
 import {Spacefi} from "./modules/spacefi";
+import {Zkswap} from "./modules/zkswap";
 
 let privateKeysTmp = readWallets('./private_keys.txt')
 shuffle(privateKeysTmp)
@@ -41,6 +42,10 @@ const checkAndExecuteModule = async (module: string, privateKey: Hex, logger: an
         case 'spacefi':
             const spacefi = await Spacefi(privateKey)
             await spacefi.roundSwap()
+            break
+        case 'zkswap':
+            const zkswap = await Zkswap(privateKey)
+            await zkswap.roundSwap()
             break
         case 'odos':
             const odos = await Odos(privateKey)
