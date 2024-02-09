@@ -1,4 +1,4 @@
-import { Hex } from "viem"
+import {Hex, hexToBigInt} from "viem"
 import { erc20Abi } from "../data/abi/erc20"
 import {random, sleep} from "./common";
 import {generalConfig} from "../config";
@@ -21,7 +21,21 @@ const checkAllowance = async (client: any, tokenAddress: Hex, contractAddress: H
 export const approve = async (walletClient: any, client: any, tokenAddress: Hex, contractAddress: Hex, amount: bigint, logger: any) => {
     const allowance = await checkAllowance(client, tokenAddress, contractAddress, walletClient.account.address)
 
-    const increasedAmount = BigInt(Number(amount) * 3)
+    let approvingAmount = amount
+
+    switch (generalConfig.approveMode) {
+        case 1:
+            approvingAmount = amount
+            break
+        case 2:
+            approvingAmount = BigInt(Number(amount) * 3)
+            break
+        case 3:
+            approvingAmount = hexToBigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
+            break
+        default:
+            logger.warn(`There are no ${generalConfig.approveMode} approveMode. Please select 1 or 2 or 3`)
+    }
     
     if (allowance < amount) {
         const txHash = await walletClient.writeContract({
@@ -30,7 +44,7 @@ export const approve = async (walletClient: any, client: any, tokenAddress: Hex,
             functionName: 'approve',
             args: [
                 contractAddress,
-                increasedAmount
+                approvingAmount
             ]
         })
         

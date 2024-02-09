@@ -17,6 +17,10 @@ export const generalConfig = {
     inchApiKey: '', // Без API ключа модуль 1inch работать не будет
     // Брать API отсюда - https://portal.1inch.dev/applications
 
+    approveMode: 2,
+    // 1 - Approve exact tokens amount
+    // 2 - Approve x3 from tokens amount
+    // 3 - Approve unlimited
     mode: 1
     // 1 − Random modules
     // 2 - Custom modules
