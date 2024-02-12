@@ -74,6 +74,7 @@ export const Odos = async (privateKey: Hex) => {
         while (!isSuccess) {
             try {
                 const quoteData = await quote(addresses.zeroAddress, addresses[toToken], uintValue)
+                console.log(quoteData)
                 const txData = await assemble(quoteData)
                 txData.value = parseInt(txData.value)
 
@@ -82,9 +83,12 @@ export const Odos = async (privateKey: Hex) => {
                 logger.info(`${walletAddress} | Success swap ${value} ETH -> ${toToken}: https://explorer.zksync.io/tx/${txHash}`)
                 isSuccess = true
             } catch (e) {
+                if (e.response?.status === 403) {
+                    logger.error(`Your IP is BLOCKED on Odos. Please use proxy or remove Odos from modules list`)
+                    return
+                }
                 if (isBalanceError(e)) {
                     logger.error(`${walletAddress} | Not enough balance`)
-                    isSuccess = true
                     return
                 } else {
                     logger.error(`${walletAddress} | ${e}`)
@@ -126,9 +130,12 @@ export const Odos = async (privateKey: Hex) => {
                 logger.info(`${walletAddress} | Success swap ${value} ${fromToken} -> ETH: https://explorer.zksync.io/tx/${txHash}`)
                 isSuccess = true
             } catch (e) {
+                if (e.response?.status === 403) {
+                    logger.error(`Your IP is BLOCKED on Odos. Please use proxy or remove Odos from modules list`)
+                    return
+                }
                 if (isBalanceError(e)) {
                     logger.error(`${walletAddress} | Not enough balance`)
-                    isSuccess = true
                     return
                 } else {
                     logger.error(`${walletAddress} | ${e}`)
