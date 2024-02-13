@@ -11,12 +11,14 @@ import axios from "axios";
 import {getTokenBalance} from "../utils/tokenBalance";
 import {approve} from "../utils/approve";
 import {chooseRandomStable} from "../utils/chooseRandomStable";
+import {getProxy} from "../utils/getProxy";
 
 export const Inch = async (privateKey: Hex) => {
     const logger = makeLogger('1inch   ')
     const zksyncClient = getZksyncPublicClient()
     const zksyncWallet = getZksyncWalletClient(privateKey)
     const walletAddress = zksyncWallet.account.address
+    let httpsAgent = getProxy()
 
     const quote = async (fromToken: Hex, toToken: Hex, amount: bigint) => {
         const config = {
@@ -29,7 +31,8 @@ export const Inch = async (privateKey: Hex) => {
                 "amount": `${amount}`,
                 "from": walletAddress,
                 "slippage": `${generalConfig.slippage}`,
-            }
+            },
+            httpsAgent,
         }
 
         const response = await axios.get('https://api.1inch.dev/swap/v5.2/324/swap', config)

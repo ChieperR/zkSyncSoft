@@ -11,12 +11,14 @@ import axios from "axios";
 import {getTokenBalance} from "../utils/tokenBalance";
 import {approve} from "../utils/approve";
 import {chooseRandomStable} from "../utils/chooseRandomStable";
+import {getProxy} from "../utils/getProxy";
 
 export const Odos = async (privateKey: Hex) => {
     const logger = makeLogger('Odos    ')
     const zksyncClient = getZksyncPublicClient()
     const zksyncWallet = getZksyncWalletClient(privateKey)
     const walletAddress = zksyncWallet.account.address
+    let httpsAgent = getProxy()
 
     const quote = async (fromToken: Hex, toToken: Hex, amount: bigint) => {
         const response = await axios.post('https://api.odos.xyz/sor/quote/v2', {
@@ -38,7 +40,7 @@ export const Odos = async (privateKey: Hex) => {
             compact: true,
             slippageLimitPercent: generalConfig.slippage
         }, {
-            httpAgent: null
+            httpsAgent
         })
 
         return response.data.pathId
@@ -50,7 +52,7 @@ export const Odos = async (privateKey: Hex) => {
             pathId: pathId,
             simulate: true,
         }, {
-            httpAgent: null
+            httpsAgent
         })
 
         const simulation = response.data.simulation

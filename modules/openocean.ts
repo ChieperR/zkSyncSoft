@@ -11,12 +11,14 @@ import axios from "axios";
 import {getTokenBalance} from "../utils/tokenBalance";
 import {approve} from "../utils/approve";
 import {chooseRandomStable} from "../utils/chooseRandomStable";
+import {getProxy} from "../utils/getProxy";
 
 export const Openocean = async (privateKey: Hex) => {
     const logger = makeLogger('Openocean')
     const zksyncClient = getZksyncPublicClient()
     const zksyncWallet = getZksyncWalletClient(privateKey)
     const walletAddress = zksyncWallet.account.address
+    let httpsAgent = getProxy()
 
     const getTransactionData = async (fromToken: Hex, toToken: Hex, amount: number) => {
         const gasPrice = formatGwei(await zksyncClient.getGasPrice())
@@ -31,7 +33,8 @@ export const Openocean = async (privateKey: Hex) => {
         }
 
         const response = await axios.get('https://open-api.openocean.finance/v3/324/swap_quote', {
-            params: params
+            params: params,
+            httpsAgent,
         })
 
         return response.data.data
