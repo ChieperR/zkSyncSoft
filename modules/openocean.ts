@@ -62,7 +62,7 @@ export const Openocean = async (privateKey: Hex) => {
                     isSuccess = true
                     return
                 } else {
-                    logger.error(`${walletAddress} | ${e}`)
+                    logger.error(`${walletAddress} | ${e.shortMessage}`)
                 }
 
                 if (retryCount <= 3) {
@@ -106,7 +106,7 @@ export const Openocean = async (privateKey: Hex) => {
                     isSuccess = true
                     return
                 } else {
-                    logger.error(`${walletAddress} | ${e}`)
+                    logger.error(`${walletAddress} | ${e.shortMessage}`)
                 }
 
                 if (retryCount <= 3) {
