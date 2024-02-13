@@ -43,7 +43,7 @@ export const Dmail = async (privateKey: Hex) => {
         let isSuccess = false
         let retryCount = 1
 
-        logger.info(`${walletAddress} | Sending Dmail message`)
+        logger.info(`${walletAddress} | Sending mail`)
 
         while (!isSuccess) {
             try {
@@ -55,7 +55,7 @@ export const Dmail = async (privateKey: Hex) => {
                     email
                 ])
 
-                logger.info(`${walletAddress} | Success Dmail Message: https://explorer.zksync.io/tx/${txHash}`)
+                logger.info(`${walletAddress} | Success mail: https://explorer.zksync.io/tx/${txHash}`)
                 isSuccess = true
             } catch (e) {
                 if (isBalanceError(e)) {
@@ -67,12 +67,12 @@ export const Dmail = async (privateKey: Hex) => {
                 }
 
                 if (retryCount <= 3) {
-                    logger.warn(`${walletAddress} | Wait 30 sec and retry swap ${retryCount}/3`)
+                    logger.warn(`${walletAddress} | Wait 30 sec and retry mail ${retryCount}/3`)
                     retryCount++
                     await sleep(30 * 1000)
                 } else {
                     isSuccess = true
-                    logger.error(`${walletAddress} | Swap unsuccessful, skip`)
+                    logger.error(`${walletAddress} | Mail unsuccessful, skip`)
                 }
             }
         }
