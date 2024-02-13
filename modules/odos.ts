@@ -74,7 +74,6 @@ export const Odos = async (privateKey: Hex) => {
         while (!isSuccess) {
             try {
                 const quoteData = await quote(addresses.zeroAddress, addresses[toToken], uintValue)
-                console.log(quoteData)
                 const txData = await assemble(quoteData)
                 txData.value = parseInt(txData.value)
 
