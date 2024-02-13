@@ -72,7 +72,6 @@ export const Izumi = async (privateKey: Hex) => {
 
         const value = formatEther(uintValue)
         const swapPath = getSwapPath(addresses.WETH, addresses[toToken])
-        console.log(swapPath)
 
         logger.info(`${walletAddress} | Swap ${value} ETH -> ${toToken}`)
 
