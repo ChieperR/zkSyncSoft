@@ -1,31 +1,18 @@
-import {
-    encodeFunctionData, encodePacked,
-    formatEther, formatUnits,
-    getContract, Hash, Hex, parseEther,
-} from 'viem'
-import {checkMinAmountOut} from "../utils/getEthPrice";
+import {encodePacked, getContract, Hex, parseEther,} from 'viem'
 import {getZksyncPublicClient, getZksyncWalletClient} from "../utils/clients/zksyncClient";
 import {waitGas} from "../utils/getCurrentGas";
 import {makeLogger} from "../utils/logger";
 import {isBalanceError} from "../utils/checkBalance";
 import {random, sleep} from "../utils/common";
 import {
-    addresses,
-    decimals,
     l2telegraphContracts,
-    l2telegraphMsgDestContracts, l2telegraphNftDestContracts,
+    l2telegraphMsgDestContracts,
+    l2telegraphNftDestContracts,
 } from "../data/zksync-contract-addresses";
-import {approve} from "../utils/approve";
 import {generalConfig} from "../config";
-import {tokens} from "../utils/types"
-import {pancakeRouterAbi} from "../data/abi/pancake_router";
-import {pancakeQuouterAbi} from "../data/abi/pancake_quoter";
-import {chooseRandomStable} from "../utils/chooseRandomStable";
 import {l2telegraphMsgAbi} from "../data/abi/l2telegraph_message";
 import {l2telegraphNftAbi} from "../data/abi/l2telegraph_nft";
 import {generate} from "random-words";
-import {ethers} from "ethers";
-import {privateKeyToAccount} from "viem/accounts";
 
 export const L2Telegraph = async (privateKey: Hex) => {
     const logger = makeLogger('L2Telegraph')
@@ -180,8 +167,8 @@ export const L2Telegraph = async (privateKey: Hex) => {
 
         logger.info(`${walletAddress} | Mint and bridging NFT`)
 
-        const destChainId = await chooseRandomDestNetwork(true)
         const txMintHash = await mint()
+        const destChainId = await chooseRandomDestNetwork(true)
 
         if (txMintHash != undefined) {
             const sleepTime = random(generalConfig.sleepAfterApprove[0], generalConfig.sleepAfterApprove[1])
