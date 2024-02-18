@@ -7,8 +7,6 @@
   },
   "type": "module",
   "devDependencies": {
-    "@types/express": "^4.17.17",
-    "@types/inquirer": "^9.0.3",
     "@types/node": "^20.2.5",
     "@types/node-fetch": "^2.6.4",
     "ts-node": "^10.9.1",
@@ -17,9 +15,7 @@
   "dependencies": {
     "@binance/connector": "^3.1.0",
     "axios": "^1.4.0",
-    "ethers": "^5.7.2",
     "https-proxy-agent": "^7.0.2",
-    "inquirer": "^9.2.11",
     "random-words": "^2.0.1",
     "tslog": "^4.9.2",
     "typescript": "^5.2.2",
