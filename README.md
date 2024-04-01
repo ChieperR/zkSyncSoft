@@ -1,15 +1,17 @@
 # ZkSync Soft
 
-## Установка
+It is a software for automate interacting with the zkSync blockchain and DeFi products in it
+
+## Install
 `npm install`
 
-Добавляем приватники в `private_keys.txt`
+Add private keys in `private_keys.txt`
 
-Запуск `npm start`
+Run `npm start`
 
-Настройки `config.ts`
+Settings in `config.ts`
 
-## Модули
+## Modules
 
 * SyncSwap
 * Mute.io
@@ -25,23 +27,23 @@
 * L2Telegraph Message
 * L2Telegraph Mint and Bridge
 
-## Особенности
+## Features
 
-* Асинхронность/Млуьтипоточность. Все аккаунты запускаются вместе, с рандомным временем отложенного старта
-* Два режима работы. Рандом модули или кастомные модули
-* Три режима аппрувов токенов. Точное кол-во, x3 от кол-ва или бесконечное кол-во
-* Плотная настройка скрипта в config.ts
-* Все дексы делают свап по кругу ETH −> Stable (USDC/USDT/DAI) −> ETH
-* Настроены разные возможные стейблы для разных дексов исходя из ликвидности
-* Использование прокси в агрегаторах свапалок (Odos, openocean, 1inch)
-* Ограничение по газу в эфире. Текущий газ проверяется перед каждой транзой
-* Плотное логирование всех действий в консоли + файл логов 
-* В L2Telegraph входящая сеть выбирается рандомно из всех возможных, исходя из вашего ограничения по комиссии л0
-* Защита от проскальзывания. Слипедж настраивается в конфиге, цена в протоколе сравнивается с ценой на бинансе. Если цена на бинансе с учетом слипеджа выше, транзакция отменяется
+* Asynchronous/Multi-threading. All accounts run together, with a randomized delayed start time
+* Two modes of operation. Random modules or custom modules
+* Three modes of token approvals. Exact amount, x3 of amount or infinite amount.
+* Tight script customization in config.ts
+* All dexes swap ETH -> Stable (USDC/USDT/DAI) -> ETH.
+* Configured different possible stables for different dexes based on liquidity
+* Use of proxies in swap aggregators (Odos, openocean, 1inch)
+* Gas limitation on ETH. Current gas is checked before each transaction
+* Dense logging of all actions in the console + log file
+* In L2Telegraph source chain is selected randomly from all possible chains, based on your L0 commission limit
+* Anti-slippage protection. Slippage is configured in config, the price in the protocol is compared to the price on the Binance. If the price on the Binance with the slippage is higher, the transaction is canceled
 
-## Настройка
+## Settings
 
-1. Вписать все приватники в private_keys.txt
-2. Желательно, но необязятельно добавить хотя бы несколько прокси в proxies.txt, odos бывает банит по айпи. Прокси вида http://login:password@ip:port
-3. Настроить config.ts. Внутри всё подробно расписано
+1. Enter all privates in private_keys.txt
+2. It is recommended, but not necessary to add at least several proxies in proxies.txt, odos sometimes bans by IP. Proxies such as http://login:password@ip:port
+3. configure config.ts. Everything is described in detail inside
 4. `npm start`
